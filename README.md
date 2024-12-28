@@ -1,2 +1,0 @@
-# Chatty
-Realtime chat app
