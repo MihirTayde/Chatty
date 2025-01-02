@@ -1,9 +1,9 @@
 import express from "express";
-
 import authRoutes from "./routes/auth.route.js";
 import { connectdb } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import { messageRoutes } from "./routes/message.route.js";
 dotenv.config();
 
 const app = express();
@@ -16,6 +16,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
 // Database connection and server start
 (async () => {
