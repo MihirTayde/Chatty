@@ -4,24 +4,20 @@ const messageSchema = new mongoose.Schema(
   {
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "User ",
       required: true,
     },
-    recieverId: {
+    receiverId: {  // Fixed typo (RecieverId → receiverId)
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "User ",
       required: true,
     },
-    image: {
+    message: {
       type: String,
-    },
-    text: {
-      type: String,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-const Message = mongoose.model("Message", messageSchema);
-
-export default Message;
+export const messageModel = mongoose.model("Message", messageSchema); // Capitalized "Message" for consistency
