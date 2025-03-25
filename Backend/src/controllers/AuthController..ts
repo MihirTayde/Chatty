@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 export const SignUp = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { username, email, password, fullName } = req.body;
+    const { username, email, password, fullName, gender } = req.body;
 
     const existingUser = await userModel.findOne({
       $or: [{ username }, { email }],
@@ -22,6 +22,7 @@ export const SignUp = async (req: Request, res: Response): Promise<void> => {
     const newUser = new userModel({
       username,
       email,
+      gender,
       password: hashedPassword, // Store the hashed password
       fullName,
     });
@@ -53,7 +54,6 @@ export const LogIn = async (req: Request, res: Response): Promise<void> => {
       existingUser.password
     );
 
-    console.log("Hashed password from database:", existingUser.password);
 
     if (!isPasswordValid) {
       res.status(401).json({ message: "Invalid credentials" });
