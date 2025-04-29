@@ -98,7 +98,9 @@ const LoginPage: React.FC = () => {
           Login
         </button>
         <button
-          type="submit"
+          onClick={() => {
+            navigate("/signup");
+          }}
           style={{
             padding: "10px",
             borderRadius: "4px",

@@ -13,7 +13,6 @@ async function connectDB() {
     console.log("MongoDB connection established successfully");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-    // Optionally, you might want to exit the application if the database connection fails
     process.exit(1);
   }
 }
