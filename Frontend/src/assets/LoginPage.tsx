@@ -26,6 +26,10 @@ const LoginPage: React.FC = () => {
         withCredentials: true,
       });
       console.log(response);
+
+      localStorage.setItem("token", response.data.token);
+
+
       alert(`${user.username} logged in successfully`);
       navigate("/Home");
     } catch (error) {

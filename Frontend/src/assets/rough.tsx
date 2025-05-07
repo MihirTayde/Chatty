@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from "axios";
 import { jwtDecode } from "jwt-decode";
 
 interface DecodedToken {
-  userId: string;
+  UserId: string;
   userName: string;
   loggedIn_UserEmail: string;
 }
@@ -12,7 +12,7 @@ interface DecodedToken {
 interface User {
   _id: string;
   fullName: string;
-  preferredLanguage: string;  
+  profilePhoto: string;
   username: string;
   email: string;
   createdAt: string;
@@ -53,8 +53,8 @@ const Home: React.FC = () => {
       try {
         const decoded: DecodedToken = jwtDecode(token);
         console.log("Decoded Token:", decoded); // Log the decoded token to check its structure
-        setLoggedIn_UserName(decoded.userName); // Set the username
-        setLoggedIn_UserId(decoded.userId); // Corrected: Use userId instead of loggedIn_UserId
+        setLoggedIn_UserName(decoded.userName);
+        setLoggedIn_UserId(decoded.userId);
         console.log("Logged-in User ID:", decoded.userId); // Log the User ID
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -62,31 +62,6 @@ const Home: React.FC = () => {
     } else {
       console.error("No token found in localStorage");
     }
-  }, []);
-
-  // Fetch all users
-  const handleGetOtherUsers = async (): Promise<void> => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found in localStorage");
-        return;
-      }
-
-      const response = await axios.get("http://localhost:4000/getOtherUsers", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setAllUsers(response.data.users);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetOtherUsers();
   }, []);
 
   // Send Message
@@ -134,58 +109,13 @@ const Home: React.FC = () => {
       alert("Please select a user to send a message to.");
     }
   };
+
+  // Handle Enter key press
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === "Enter" && !event.shiftKey) {
       // Prevent default to avoid creating a new line
       event.preventDefault();
       handleSendMessage();
-    }
-  };
-
-  // Fetch chat history
-  const handleUserClick = async (user: User): Promise<void> => {
-    setSelectedUser(user);
-
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        console.error("No token found.");
-        return;
-      }
-
-      const chatHistoryResponse: AxiosResponse<{
-        success: boolean;
-        messages: NewMessage[];
-      }> = await axios.get(`http://localhost:4000/getMessages/${user._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (chatHistoryResponse.data.success) {
-        setChatMessages(chatHistoryResponse.data.messages);
-      } else {
-        setChatMessages([]);
-      }
-    } catch (error) {
-      console.error("Error fetching chat history:", error);
-      setChatMessages([]);
-    }
-  };
-
-  // Logout
-  const handleLogout = async () => {
-    try {
-      await axios.post(
-        "http://localhost:4000/LogOut",
-        {},
-        { withCredentials: true }
-      );
-
-      localStorage.removeItem("token");
-      window.location.href = "/";
-    } catch (error: unknown) {
-      console.error("Error in logging out:", error);
     }
   };
 
@@ -270,11 +200,11 @@ const Home: React.FC = () => {
             }
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={handleKeyPress}
+            onKeyDown={handleKeyPress} // Handle Enter key press
           />
           <button
             className="send-button"
-            onClick={handleSendMessage}
+            onClick={handleSendMessage} // Send message on button click
             disabled={!selectedUser}
           >
             Send

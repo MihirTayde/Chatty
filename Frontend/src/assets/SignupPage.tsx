@@ -33,6 +33,7 @@ const SignupPage: React.FC = () => {
       });
 
       console.log("Signup successful:", response.data);
+      console.log("User Data:", user);
 
       setUser({
         fullName: "",

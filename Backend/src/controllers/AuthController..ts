@@ -44,7 +44,7 @@ export const LogIn = async (req: Request, res: Response): Promise<void> => {
     const existingUser = await userModel.findOne({ username });
 
     if (!existingUser) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "User  not found" });
       return;
     }
 
@@ -54,7 +54,6 @@ export const LogIn = async (req: Request, res: Response): Promise<void> => {
       existingUser.password
     );
 
-
     if (!isPasswordValid) {
       res.status(401).json({ message: "Invalid credentials" });
       return;
@@ -62,7 +61,9 @@ export const LogIn = async (req: Request, res: Response): Promise<void> => {
 
     // If successful, send a response (with JWT)
     const tokenData = {
-      userId: existingUser._id, // Use existingUser._id
+      userId: existingUser._id, // Correctly using 'userId'
+      userName: existingUser.username,
+      loggedIn_UserEmail: existingUser.email,
     };
 
     const token = await jwt.sign(
@@ -111,7 +112,7 @@ export const LogOut = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getOtherUser = async (
+export const getOtherUsers = async (
   req: Request,
   res: Response
 ): Promise<void> => {
